@@ -4,17 +4,24 @@ import java.util.ArrayList;
 
 public class Team {
     //user who created the team
-    String owner;
-    String name;
+    private String owner;
+    private String name;
 
     //Arrays of players on team by position
-    Player[] defenderArray = new Player[4]; //how many of each position I forget?
-    Player[] midfielderArray = new Player[3];
-    Player[] forwardArray = new Player[3];
-    Player goalie;
+    private Player[] defenderArray = new Player[4]; //how many of each position I forget?
+    private Player[] midfielderArray = new Player[3];
+    private Player[] forwardArray = new Player[3];
+    private Player goalie;
 
     Team(String myName){
         name = myName;
+    }
+
+    public String getName(){
+        return name;
+    }
+    public String getOwner(){
+        return owner;
     }
 
 

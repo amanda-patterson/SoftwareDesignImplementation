@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class Player {
     //attributes
-    String name;
-    String premierTeam;
-    String position;
-    String leagueTeam = "";
-    int currentWeeksScore;
-    ArrayList<Integer> pointsRecord = new ArrayList<Integer>();
-    double avgScore = 0;
+    private String name;
+    private String premierTeam;
+    private String position;
+    private String leagueTeam = "";
+    private int currentWeeksScore;
+    private ArrayList<Integer> pointsRecord = new ArrayList<Integer>();
+    private double avgScore = 0;
 
     //constructor
     Player(String myName, String myTeam, String myPosition){
@@ -19,10 +19,37 @@ public class Player {
         position = myPosition;
     }
 
-    //operations
+    public String getName(){
+        return name;
+    }
+    public String getPremierTeam(){
+        return premierTeam;
+    }
+    public String getPosition(){
+        return position;
+    }
+    public String getLeagueTeam(){
+        return leagueTeam;
+    }
+    public void setLeagueTeam(String myTeam){
+        leagueTeam = myTeam;
+    }
+    public int getCurrentWeeksScore(){
+        return currentWeeksScore;
+    }
+    public void setCurrentWeeksScore(int x){
+        currentWeeksScore = x;
+    }
+    public ArrayList<Integer> getPointsRecord(){
+        return pointsRecord;
+    }
+    public void addPointsRecord(int x){
+        pointsRecord.add(x);
+    }
+
     //returns true if a player isn't on any team
     public boolean isFree() {
-        if (leagueTeam == ""){
+        if (leagueTeam.equals("")){
             return true;
         } else {
             return false;
