@@ -7,6 +7,7 @@ import static java.lang.System.out;
 
 public abstract class User {
     Scanner in = new Scanner(System.in);
+    Scanner in2 = new Scanner(System.in); //I could not for the life of me figure out why I need 2 scanners, but it works with 2 and not with 1, so here we are
 
     protected String name;
     protected int privateID;
@@ -45,7 +46,7 @@ public abstract class User {
             if (checkID()) {
                 Team currentTeam = myLeague.getTeamFromName(teamName);
                 out.println("Enter the name of the player you want to draft: ");
-                String playerName = in.nextLine();
+                String playerName = in2.nextLine();
                 for (Player player : myLeague.getPool().getPlayers()) {
                     if (player.getName().equals(playerName)) {
                         if (player.isFree()) {

@@ -8,7 +8,7 @@ import static java.lang.System.*;
 public class Main {
     public static void managerConstructor(LeagueManager newManager){
         Scanner in = new Scanner(System.in);
-        Scanner in2 = new Scanner(System.in);
+        Scanner in2 = new Scanner(System.in); //I could not for the life of me figure out why I need 2 scanners, but it works with 2 and not with 1, so here we are
 
         out.println("Congrats! You are creating your own league. "
         + "Let's get some information to get started.");

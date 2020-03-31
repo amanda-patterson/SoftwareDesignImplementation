@@ -188,7 +188,9 @@ public class League {
                     TeamManager manager = getManagerFromName(managers, owner);
                     int i = 0;
                     while (i < 1) {
-                        if (manager.draftPlayer(teamName, this)) {
+                        boolean again = manager.draftPlayer(teamName, this);
+                        out.println("is this happening?");
+                        if (again) {
                             i++;
                         }
                     }
