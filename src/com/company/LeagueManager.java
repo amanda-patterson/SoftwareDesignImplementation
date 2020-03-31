@@ -20,10 +20,7 @@ public class LeagueManager extends User {
         leagueName = newName;
     }
     public void close(League myLeague){
-        Scanner in = new Scanner(System.in);
-        out.println("This is a League Manager command. Please input your 4 digit ID:");
-        int givenid = in.nextInt();
-        if(givenid == this.getPrivateID()) {
+        if(checkID(1)) {
             myLeague.close();
             out.println("Your league is now closed.");
         }else{
@@ -31,10 +28,7 @@ public class LeagueManager extends User {
         }
     }
     public void open(League myLeague){
-        Scanner in = new Scanner(System.in);
-        out.println("This is a League Manager command. Please input your 4 digit ID:");
-        int givenid = in.nextInt();
-        if(givenid == this.getPrivateID()) {
+        if(checkID(1)) {
             myLeague.open();
             out.println("Your league is now open.");
         }else{
@@ -43,38 +37,42 @@ public class LeagueManager extends User {
     }
 
     public void addStatistics(League myLeague){
-        Scanner in = new Scanner(System.in);
-        out.println("This is a League Manager command. Please input your 4 digit ID:");
-        int givenid = in.nextInt();
-        if(givenid == this.getPrivateID()) {
-            for (int i = 0; i < myLeague.getPool().getDefenders().size(); i++) {
-                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getDefenders().get(i).getName() +
+        if(checkID(1)){
+            for (int i = 0; i < myLeague.getPool().getPlayers().size(); i++) {
+                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getPlayers().get(i).getName() +
                         " earned this week:");
                 int x = in.nextInt();
-                myLeague.getPool().getDefenders().get(i).setCurrentWeeksScore(x);
-                myLeague.getPool().getDefenders().get(i).addPointsRecord(x);
+                myLeague.getPool().getPlayers().get(i).setCurrentWeeksScore(x);
+                myLeague.getPool().getPlayers().get(i).addPointsRecord(x);
             }
-            for (int i = 0; i < myLeague.getPool().getMidfielders().size(); i++) {
-                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getMidfielders().get(i).getName() +
-                        " earned this week:");
-                int x = in.nextInt();
-                myLeague.getPool().getMidfielders().get(i).setCurrentWeeksScore(x);
-                myLeague.getPool().getMidfielders().get(i).addPointsRecord(x);
-            }
-            for (int i = 0; i < myLeague.getPool().getForwards().size(); i++) {
-                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getForwards().get(i).getName() +
-                        " earned this week:");
-                int x = in.nextInt();
-                myLeague.getPool().getForwards().get(i).setCurrentWeeksScore(x);
-                myLeague.getPool().getForwards().get(i).addPointsRecord(x);
-            }
-            for (int i = 0; i < myLeague.getPool().getGoalies().size(); i++) {
-                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getGoalies().get(i).getName() +
-                        " earned this week:");
-                int x = in.nextInt();
-                myLeague.getPool().getGoalies().get(i).setCurrentWeeksScore(x);
-                myLeague.getPool().getGoalies().get(i).addPointsRecord(x);
-            }
+//            for (int i = 0; i < myLeague.getPool().getDefenders().size(); i++) {
+//                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getDefenders().get(i).getName() +
+//                        " earned this week:");
+//                int x = in.nextInt();
+//                myLeague.getPool().getDefenders().get(i).setCurrentWeeksScore(x);
+//                myLeague.getPool().getDefenders().get(i).addPointsRecord(x);
+//            }
+//            for (int i = 0; i < myLeague.getPool().getMidfielders().size(); i++) {
+//                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getMidfielders().get(i).getName() +
+//                        " earned this week:");
+//                int x = in.nextInt();
+//                myLeague.getPool().getMidfielders().get(i).setCurrentWeeksScore(x);
+//                myLeague.getPool().getMidfielders().get(i).addPointsRecord(x);
+//            }
+//            for (int i = 0; i < myLeague.getPool().getForwards().size(); i++) {
+//                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getForwards().get(i).getName() +
+//                        " earned this week:");
+//                int x = in.nextInt();
+//                myLeague.getPool().getForwards().get(i).setCurrentWeeksScore(x);
+//                myLeague.getPool().getForwards().get(i).addPointsRecord(x);
+//            }
+//            for (int i = 0; i < myLeague.getPool().getGoalies().size(); i++) {
+//                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getGoalies().get(i).getName() +
+//                        " earned this week:");
+//                int x = in.nextInt();
+//                myLeague.getPool().getGoalies().get(i).setCurrentWeeksScore(x);
+//                myLeague.getPool().getGoalies().get(i).addPointsRecord(x);
+//            }
             out.println("Statistics updated.");
         }else{
             out.println("Incorrect ID.");
@@ -82,32 +80,42 @@ public class LeagueManager extends User {
     }
 
     public void setDraftOrder(League myLeague){
-        Scanner in = new Scanner(System.in);
-        out.println("This is a League Manager command. Please input your 4 digit ID:");
-        int givenid = in.nextInt();
-        if(givenid == this.getPrivateID()) {
-            ArrayList<Integer> ordering = new ArrayList<Integer>();
-            out.println("Please enter the order in which teams should draft players.");
-            for (int i = 0; i < myLeague.getTeams().size(); i++) {
-                out.println((i + 1) + " - " + myLeague.getTeams().get(i).getName());
+        if(checkID(1)) {
+            if(myLeague.isOpen() == 0) {
+                ArrayList<Integer> ordering = new ArrayList<Integer>();
+                out.println("Please enter the order in which teams should draft players.");
+                for (int i = 0; i < myLeague.getTeams().size(); i++) {
+                    out.println((i + 1) + " - " + myLeague.getTeams().get(i).getName());
+                }
+                for (int i = 0; i < myLeague.getTeams().size(); i++) {
+                    ordering.add(in.nextInt() - 1);
+                }
+                myLeague.setDraftOrder(ordering);
+                out.println("Order set.");
+            }else{
+                out.println("You must close the league first.");
             }
-            for (int i = 0; i < myLeague.getTeams().size(); i++) {
-                ordering.add(in.nextInt());
-            }
-            myLeague.setDraftOrder(ordering);
-            out.println("Order set.");
         }else{
             out.println("Incorrect ID.");
         }
     }
     public void scheduler(League myLeague){
-        Scanner in = new Scanner(System.in);
-        out.println("This is a League Manager command. Please input your 4 digit ID:");
-        int givenid = in.nextInt();
-        if(givenid == this.getPrivateID()) {
+        if(checkID(1)) {
             myLeague.setSchedule();
         }else{
             out.println("Incorrect ID.");
         }
     }
+
+    public void startDraft(ArrayList<TeamManager> managers, League myLeague){
+        if(checkID(1)) {
+            if(myLeague.runDraft(managers)) {
+                out.println("The draft is complete.");
+            }
+        }else{
+            out.println("Incorrect ID.");
+        }
+    }
+
+
 }

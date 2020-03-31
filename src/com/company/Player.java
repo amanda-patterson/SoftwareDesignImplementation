@@ -1,19 +1,23 @@
 package com.company;
 
 import java.util.ArrayList;
+import static java.lang.System.*;
 
 public class Player {
+    enum Position {
+        d, m, f, g;
+    }
     //attributes
     private String name;
     private String premierTeam;
-    private String position;
+    private Position position;
     private String leagueTeam = "";
     private int currentWeeksScore;
     private ArrayList<Integer> pointsRecord = new ArrayList<Integer>();
     private double avgScore = 0;
 
     //constructor
-    Player(String myName, String myTeam, String myPosition){
+    Player(String myName, String myTeam, Position myPosition){
         name = myName;
         premierTeam = myTeam;
         position = myPosition;
@@ -25,7 +29,7 @@ public class Player {
     public String getPremierTeam(){
         return premierTeam;
     }
-    public String getPosition(){
+    public Position getPosition(){
         return position;
     }
     public String getLeagueTeam(){
@@ -63,4 +67,10 @@ public class Player {
         }
         avgScore = (total*1.0)/x;
     }
+
+    public void printPlayer(){
+        out.println(this.name + ", Team: " + this.premierTeam + ", Position: " + this.position +
+                ", Average Score: " + this.avgScore);
+    }
+
 }

@@ -13,7 +13,7 @@ public class Main {
         out.println("Congrats! You are creating your own league. "
         + "Let's get some information to get started.");
 
-        out.println("What's would you like your username to be?");
+        out.println("What would you like your username to be?");
         String newName = in.nextLine();
         newManager.setName(newName);
 
@@ -28,12 +28,13 @@ public class Main {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Scanner in = new Scanner(System.in);
         String command = "";
         int leagueFlag = 0;
         LeagueManager myManager = new LeagueManager();
         League myLeague = new League();
+        ArrayList<TeamManager> myTeamManagers = new ArrayList<TeamManager>();
 
         out.println("Hello and welcome to Fantasy Soccer! To begin type 'start': ");
         while (!command.equals("exit-program")){
@@ -53,7 +54,12 @@ public class Main {
                     }else{
                         if(myLeague.getName() != null) out.println("There is already a league set up. Would you like to join " + myLeague.getName() + " as a team manager? y/n");
                         if(in.nextLine().equals("y")){
-                            out.println("Sorry, this functionality isn't up and running yet!");
+                            TeamManager newManager = new TeamManager();
+                            newManager.joinLeague(myLeague);
+                            myTeamManagers.add(newManager);
+//                            for(TeamManager m: myTeamManagers){
+//                                out.println(m.getName());
+//                            }
                         }else{
                             out.println("Okay. Goodbye.");
                         }
@@ -65,14 +71,20 @@ public class Main {
                 case "openLeague":
                     myManager.open(myLeague);
                     break;
-                case "addStats":
-                    myManager.addStatistics(myLeague);
-                    break;
+//                case "addStats":
+//                    myManager.addStatistics(myLeague);
+//                    break;
                 case "setDraftOrder":
                     myManager.setDraftOrder(myLeague);
                     break;
                 case "setSchedule":
                     myManager.scheduler(myLeague);
+                    break;
+                case "startDraft":
+                    myManager.startDraft(myTeamManagers, myLeague);
+                    break;
+                case "test":
+                    myLeague.leagueController(myManager);
                     break;
                 default:
                     out.println("Please provide a valid command:");
