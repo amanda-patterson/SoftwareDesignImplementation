@@ -13,10 +13,11 @@ public class League {
     private String owner;
     private ArrayList<Team> teams = new ArrayList<Team>();
     private FootballPool myPool = new FootballPool();
-    private ArrayList<Integer> draftOrder;
+    private ArrayList<Integer> draftOrder = new ArrayList<Integer>();
     private Integer[][] scheduledMatches;
     private int open = 1; //1 means teams can be added, 0 means no more teams allowed
-    private int draftFlag = 1; //0 means draft not complete, 1 is complete.
+    private int draftFlag = 0; //0 means draft not complete, 1 is complete.
+    private int tradeFlag = 0;
 
     //This is just for testing. Teams will not be added this way in Assignment 3.
 //    Team team0 = new Team("Jerry");
@@ -168,7 +169,7 @@ public class League {
     public boolean runDraft(ArrayList<TeamManager> managers){
         //for testing we are only adding 2 players per team
         //remember to change this
-        if(draftOrder.size() == 0 && open == 0){
+        if(draftOrder.size() == 0 || open == 1){
             out.println("You must close the league and set the draft order first.");
             return false;
         }else {
@@ -206,25 +207,68 @@ public class League {
         return null;
     }
 
+    //the team with the most amount of wins is the winner, if there is a tie, then the team with the higher points wins
+    public Team calcWinner(){
+        ArrayList<Team> winners = new ArrayList<Team>();
+        int maxWins = 0;
+        for(Team team : teams){
+            if(team.calcWins() > maxWins){
+                maxWins = team.calcWins();
+            }
+        }
+        for(Team team : teams){
+            if(team.calcWins() == maxWins){
+                winners.add(team);
+            }
+        }
+        Team finalWinner = null;
+        int points = 0;
+        for(Team team : winners){
+            if(team.getTotalPoints() > points){
+                finalWinner = team;
+            }
+        }
+        return finalWinner;
+    }
+
     //remember to change the flag back @ me!
     public void leagueController(LeagueManager manager) throws InterruptedException {
-        if(draftFlag==1) {
+        if(draftFlag==1 && scheduledMatches != null) {
             out.println("Congrats. Your season is underway.");
-            //Create the matchups for the week
-            //Print out the matchups for the week
-            sleep(2000); //wait a week
-            out.println("The week of play has ended. League Manager, please enter the weeks statistics.");
-            manager.addStatistics(this);
-            //Update the matchups
-            //Update team records
-            //Print out who won and lost?
-            //"You may now trade, draft, or drop players" -turn on a trade flag
-            //Wait 24 hours - turn off trade flag
-            //Remove matchups
-            //The next week of play has started.
-
-//            Date current = new Date();
-//            out.println("here: " + current);
+            int numTeams = teams.size();
+            for(int week = 0; week < scheduledMatches.length; week++) {
+                out.println("The week of play will start now.");
+                ArrayList<Matchup> weeklyMatches = new ArrayList<Matchup>();
+                //Create the matchups for the week
+                for (int i = 0; i < numTeams; i += 2) {
+                    Team teamA = teams.get(scheduledMatches[week][i]);
+                    Team teamB = teams.get(scheduledMatches[week][i + 1]);
+                    Matchup newMatch = new Matchup(teamA, teamB);
+                    weeklyMatches.add(newMatch);
+                }
+                //Print out the matchups for the week
+                out.println("The matches for this week are as follows: ");
+                for (Matchup match : weeklyMatches) {
+                    match.printMatch();
+                }
+                sleep(4000); //wait a week
+                out.println("The week of play has ended. League Manager, please enter the weeks statistics.");
+                manager.addStatistics(this);
+                //Update the matchups
+                // Print out who won and lost
+                for (Matchup match : weeklyMatches) {
+                    match.closeMatch();
+                    match.printMatch(true);
+                }
+                this.tradeFlag = 1;
+                out.println("You may now trade, draft, or drop players for the next 24 hours.");
+                sleep(4000); //wait 24 hours
+                this.tradeFlag = 0;
+                out.println("The trading period is over.");
+                //The next week of play has started.
+            }
+            out.println("Congrats, you have finished the season!");
+            //winner things
         }else{
             out.println("You must start the draft before entering the season.");
         }

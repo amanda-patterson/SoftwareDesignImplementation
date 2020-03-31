@@ -15,6 +15,9 @@ public class Team {
 //    private Player[] midfielderArray = new Player[3];
 //    private Player[] forwardArray = new Player[3];
     private Player goalie;
+    //Recorded wins/loses of the team by week
+    private ArrayList<Integer> teamRecord = new ArrayList<Integer>();
+    private int totalPoints = 0;
 
     Team(String myName, String myOwner){
         name = myName;
@@ -91,7 +94,9 @@ public class Team {
         for (Player player: forwardArray){
             sum += player.getCurrentWeeksScore();
         }
-        sum += goalie.getCurrentWeeksScore();
+        if(goalie != null) {
+            sum += goalie.getCurrentWeeksScore();
+        }
         return sum;
     }
 
@@ -117,8 +122,23 @@ public class Team {
         return null;
     }
 
+    //Teams get a 2 for a win, 1 for a tie, and 0 for a loss
+    public void addToRecord(int result, int points){
+        teamRecord.add(result);
+        this.totalPoints += points;
+    }
+    public int calcWins(){
+        int numWins = 0;
+        for(int game : teamRecord){
+            if(game == 2){
+                numWins++;
+            }
+        }
+        return numWins;
+    }
+    public int getTotalPoints(){
+        return totalPoints;
+    }
 
 
-    //Recorded wins/loses of the team by week
-    ArrayList<Integer> teamRecord;
 }

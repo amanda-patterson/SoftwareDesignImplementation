@@ -52,16 +52,21 @@ public class Main {
                             out.println("Okay. Goodbye.");
                         }
                     }else{
-                        if(myLeague.getName() != null) out.println("There is already a league set up. Would you like to join " + myLeague.getName() + " as a team manager? y/n");
-                        if(in.nextLine().equals("y")){
-                            TeamManager newManager = new TeamManager();
-                            newManager.joinLeague(myLeague);
-                            myTeamManagers.add(newManager);
+                        if(myLeague.isOpen() == 1) {
+                            if (myLeague.getName() != null)
+                                out.println("There is already a league set up. Would you like to join " + myLeague.getName() + " as a team manager? y/n");
+                            if (in.nextLine().equals("y")) {
+                                TeamManager newManager = new TeamManager();
+                                newManager.joinLeague(myLeague);
+                                myTeamManagers.add(newManager);
 //                            for(TeamManager m: myTeamManagers){
 //                                out.println(m.getName());
 //                            }
+                            } else {
+                                out.println("Okay. Goodbye.");
+                            }
                         }else{
-                            out.println("Okay. Goodbye.");
+                            out.println("Sorry this league is closed. No more users can join.");
                         }
                     }
                     break;
@@ -83,8 +88,9 @@ public class Main {
                 case "startDraft":
                     myManager.startDraft(myTeamManagers, myLeague);
                     break;
-                case "test":
-                    myLeague.leagueController(myManager);
+                case "startSeason":
+                    myManager.startSeason(myLeague);
+//                    myLeague.leagueController(myManager);
                     break;
                 default:
                     out.println("Please provide a valid command:");

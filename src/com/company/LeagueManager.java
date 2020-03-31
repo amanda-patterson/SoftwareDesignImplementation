@@ -117,5 +117,13 @@ public class LeagueManager extends User {
         }
     }
 
+    public void startSeason(League myLeague) throws InterruptedException {
+        if(checkID(1)) {
+            myLeague.leagueController(this);
+        }else{
+            out.println("Incorrect ID.");
+        }
+    }
+
 
 }

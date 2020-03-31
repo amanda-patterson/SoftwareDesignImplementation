@@ -22,6 +22,8 @@ public class TeamManager extends User {
 
         out.println("You must have at least one team in the league");
         this.createNewTeam(myLeague);
+
+        out.println("You're all set up!");
     }
 
     public void leaveLeague(League myLeague){
