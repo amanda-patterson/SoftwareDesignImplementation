@@ -41,14 +41,18 @@ public abstract class User {
         }
     }
     public boolean draftPlayer(String teamName, League myLeague){
-        Team currentTeam = myLeague.getTeamFromName(teamName);
-        out.println("Enter the name of the player you want to draft: ");
-        String playerName = in.nextLine();
-        for (Player player : myLeague.getPool().getPlayers()){
-            if (player.getName().equals(playerName)){
-                if(player.isFree()) {
-                    currentTeam.addPlayer(player);
-                    return true;
+        if(myLeague.canTrade()) {
+            if (checkID()) {
+                Team currentTeam = myLeague.getTeamFromName(teamName);
+                out.println("Enter the name of the player you want to draft: ");
+                String playerName = in.nextLine();
+                for (Player player : myLeague.getPool().getPlayers()) {
+                    if (player.getName().equals(playerName)) {
+                        if (player.isFree()) {
+                            currentTeam.addPlayer(player);
+                            return true;
+                        }
+                    }
                 }
             }
         }
@@ -56,22 +60,49 @@ public abstract class User {
     }
 
     public void dropPlayer(String teamName, League myLeague){
-        Team currentTeam = myLeague.getTeamFromName(teamName);
-        out.println("Enter the name of the player you want to drop");
-        String playerName = in.nextLine();
-        Player remove = currentTeam.getPlayerFromName(playerName);
-        currentTeam.removePlayer(remove);
+        if(myLeague.canTrade()) {
+            if (checkID()) {
+                Team currentTeam = myLeague.getTeamFromName(teamName);
+                out.println("Enter the name of the player you want to drop");
+                String playerName = in.nextLine();
+                Player remove = currentTeam.getPlayerFromName(playerName);
+                currentTeam.removePlayer(remove);
+            }
+        }else{
+            out.println("This command is not available currently.");
+        }
     }
     //Team1 wants to trade player1 for player2 on Team2
-    public void tradePlayer(String team1, String player1, String team2, String player2, League myLeague){
-        Team teamA = myLeague.getTeamFromName(team1);
-        Team teamB = myLeague.getTeamFromName(team2);
-        Player playerA = teamA.getPlayerFromName(player1);
-        Player playerB = teamB.getPlayerFromName(player2);
-        teamA.removePlayer(playerA);
-        teamB.removePlayer(playerB);
-        teamA.addPlayer(playerB);
-        teamB.addPlayer(playerA);
+    public void tradePlayer(League myLeague, ArrayList<TeamManager> managers){
+        if(myLeague.canTrade()) {
+            if (checkID()) {
+                out.println("Please input your team name: ");
+                String team1 = in.nextLine();
+                out.println("Please input the player you would like to trade away: ");
+                String player1 = in.nextLine();
+                out.println("Please input the name of the team you would like to trade with: ");
+                String team2 = in.nextLine();
+                out.println("Please input the player you would like to acquire: ");
+                String player2 = in.nextLine();
+                Team teamA = myLeague.getTeamFromName(team1);
+                Team teamB = myLeague.getTeamFromName(team2);
+                String acceptorName = teamB.getOwner();
+                TeamManager acceptor = myLeague.getManagerFromName(managers, acceptorName);
+                out.println("Do you accept this trade, " + acceptorName + "? Please input your ID to accept or 0 to decline.");
+                if (acceptor.checkID()) {
+                    Player playerA = teamA.getPlayerFromName(player1);
+                    Player playerB = teamB.getPlayerFromName(player2);
+                    teamA.removePlayer(playerA);
+                    teamB.removePlayer(playerB);
+                    teamA.addPlayer(playerB);
+                    teamB.addPlayer(playerA);
+                } else {
+                    out.println("This trade was declined.");
+                }
+            }
+        }else{
+            out.println("This command is not available currently.");
+        }
     }
 
     public boolean checkID(){

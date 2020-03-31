@@ -17,7 +17,7 @@ public class League {
     private Integer[][] scheduledMatches;
     private int open = 1; //1 means teams can be added, 0 means no more teams allowed
     private int draftFlag = 0; //0 means draft not complete, 1 is complete.
-    private int tradeFlag = 0;
+    private int tradeFlag = 1;
 
     //This is just for testing. Teams will not be added this way in Assignment 3.
 //    Team team0 = new Team("Jerry");
@@ -237,6 +237,7 @@ public class League {
             out.println("Congrats. Your season is underway.");
             int numTeams = teams.size();
             for(int week = 0; week < scheduledMatches.length; week++) {
+                tradeFlag = 0;
                 out.println("The week of play will start now.");
                 ArrayList<Matchup> weeklyMatches = new ArrayList<Matchup>();
                 //Create the matchups for the week
@@ -263,14 +264,23 @@ public class League {
                 this.tradeFlag = 1;
                 out.println("You may now trade, draft, or drop players for the next 24 hours.");
                 sleep(4000); //wait 24 hours
-                this.tradeFlag = 0;
                 out.println("The trading period is over.");
                 //The next week of play has started.
             }
             out.println("Congrats, you have finished the season!");
-            //winner things
+            Team winner = calcWinner();
+            out.println("The winner is: " + winner.getName() + "! " + winner.getName() + " had " + winner.calcWins()
+                    + " wins and " + winner.getTotalPoints() + " points total.");
         }else{
             out.println("You must start the draft before entering the season.");
+        }
+    }
+
+    public boolean canTrade(){
+        if(tradeFlag == 1){
+            return true;
+        }else{
+            return false;
         }
     }
 
