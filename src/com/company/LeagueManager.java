@@ -44,6 +44,7 @@ public class LeagueManager extends User {
                 int x = in.nextInt();
                 myLeague.getPool().getPlayers().get(i).setCurrentWeeksScore(x);
                 myLeague.getPool().getPlayers().get(i).addPointsRecord(x);
+                myLeague.getPool().getPlayers().get(i).updateAvgScore();
             }
 //            for (int i = 0; i < myLeague.getPool().getDefenders().size(); i++) {
 //                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getDefenders().get(i).getName() +
@@ -117,9 +118,9 @@ public class LeagueManager extends User {
         }
     }
 
-    public void startSeason(League myLeague) throws InterruptedException {
+    public void startSeason(League myLeague, ArrayList<TeamManager> managers) throws InterruptedException {
         if(checkID(1)) {
-            myLeague.leagueController(this);
+            myLeague.leagueController(this, managers);
         }else{
             out.println("Incorrect ID.");
         }

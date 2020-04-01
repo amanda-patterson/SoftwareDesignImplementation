@@ -60,10 +60,10 @@ public abstract class User {
         return false;
     }
 
-    public void dropPlayer(String teamName, League myLeague){
+    public void dropPlayer(Team currentTeam, League myLeague){
         if(myLeague.canTrade()) {
             if (checkID()) {
-                Team currentTeam = myLeague.getTeamFromName(teamName);
+//                Team currentTeam = myLeague.getTeamFromName(teamName);
                 out.println("Enter the name of the player you want to drop");
                 String playerName = in.nextLine();
                 Player remove = currentTeam.getPlayerFromName(playerName);
@@ -74,18 +74,18 @@ public abstract class User {
         }
     }
     //Team1 wants to trade player1 for player2 on Team2
-    public void tradePlayer(League myLeague, ArrayList<TeamManager> managers){
+    public void tradePlayer(Team teamA, League myLeague, ArrayList<TeamManager> managers){
         if(myLeague.canTrade()) {
             if (checkID()) {
-                out.println("Please input your team name: ");
-                String team1 = in.nextLine();
+//                out.println("Please input your team name: ");
+//                String team1 = in.nextLine();
                 out.println("Please input the player you would like to trade away: ");
-                String player1 = in.nextLine();
+                String player1 = in2.nextLine();
                 out.println("Please input the name of the team you would like to trade with: ");
-                String team2 = in.nextLine();
+                String team2 = in2.nextLine();
                 out.println("Please input the player you would like to acquire: ");
-                String player2 = in.nextLine();
-                Team teamA = myLeague.getTeamFromName(team1);
+                String player2 = in2.nextLine();
+//                Team teamA = myLeague.getTeamFromName(team1);
                 Team teamB = myLeague.getTeamFromName(team2);
                 String acceptorName = teamB.getOwner();
                 TeamManager acceptor = myLeague.getManagerFromName(managers, acceptorName);

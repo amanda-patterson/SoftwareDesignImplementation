@@ -70,7 +70,7 @@ public class Player {
 
     public void printPlayer(){
         out.println(this.name + ", Team: " + this.premierTeam + ", Position: " + this.position +
-                ", Average Score: " + this.avgScore);
+                ", Average Score: " + this.avgScore + ", LeagueTeam: " + leagueTeam);
     }
 
 }

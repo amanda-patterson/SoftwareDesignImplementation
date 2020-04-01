@@ -64,8 +64,10 @@ public class Team {
         defenderArray.remove(player);
         midfielderArray.remove(player);
         forwardArray.remove(player);
-        if (goalie.equals(player)){
-            goalie = null;
+        if(goalie != null) {
+            if (goalie.equals(player)) {
+                goalie = null;
+            }
         }
     }
 
@@ -80,7 +82,9 @@ public class Team {
         for (Player player: forwardArray){
             player.printPlayer();
         }
-        goalie.printPlayer();
+        if(goalie != null){
+            goalie.printPlayer();
+        }
     }
 
     public int sumPoints(){
@@ -101,8 +105,10 @@ public class Team {
     }
 
     public Player getPlayerFromName(String name){
-        if(goalie.getName().equals(name)){
-            return goalie;
+        if(goalie != null) {
+            if (goalie.getName().equals(name)) {
+                return goalie;
+            }
         }
         for (Player player : defenderArray){
             if(player.getName().equals(name)){
@@ -136,9 +142,20 @@ public class Team {
         }
         return numWins;
     }
+    public int calcLoses(){
+        int numLose = 0;
+        for(int game : teamRecord){
+            if(game == 0){
+                numLose++;
+            }
+        }
+        return numLose;
+    }
     public int getTotalPoints(){
         return totalPoints;
     }
 
-
+    public void printRecord() {
+        out.println(name + ": " + calcWins() + " wins, " + calcLoses() + " loses, " + totalPoints + " points total");
+    }
 }

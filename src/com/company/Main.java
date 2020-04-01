@@ -82,38 +82,38 @@ public class Main {
                 case "setDraftOrder":
                     myManager.setDraftOrder(myLeague);
                     break;
-                case "setSchedule":
+                case "initiateSchedule":
                     myManager.scheduler(myLeague);
                     break;
                 case "startDraft":
                     myManager.startDraft(myTeamManagers, myLeague);
                     break;
                 case "startSeason":
-                    myManager.startSeason(myLeague);
+                    myManager.startSeason(myLeague, myTeamManagers);
 //                    myLeague.leagueController(myManager);
                     break;
-                case "draftPlayer":
-                    out.println("Please enter your username:");
-                    String username = in.nextLine();
-                    TeamManager current = myLeague.getManagerFromName(myTeamManagers, username);
-                    out.println("Please enter your team name:");
-                    String currentTeam = in.nextLine();
-                    current.draftPlayer(currentTeam, myLeague);
-                    break;
-                case "tradePlayer":
-                    out.println("Please enter your username:");
-                    String username1 = in.nextLine();
-                    TeamManager current1 = myLeague.getManagerFromName(myTeamManagers, username1);
-                    current1.tradePlayer(myLeague, myTeamManagers);
-                    break;
-                case "dropPlayer":
-                    out.println("Please enter your username:");
-                    String username2 = in.nextLine();
-                    TeamManager current2 = myLeague.getManagerFromName(myTeamManagers, username2);
-                    out.println("Please enter your team name:");
-                    String currentTeam1 = in.nextLine();
-                    current2.dropPlayer(currentTeam1, myLeague);
-                    break;
+//                case "draftPlayer":
+//                    out.println("Please enter your username:");
+//                    String username = in.nextLine();
+//                    TeamManager current = myLeague.getManagerFromName(myTeamManagers, username);
+//                    out.println("Please enter your team name:");
+//                    String currentTeam = in.nextLine();
+//                    current.draftPlayer(currentTeam, myLeague);
+//                    break;
+//                case "tradePlayer":
+//                    out.println("Please enter your username:");
+//                    String username1 = in.nextLine();
+//                    TeamManager current1 = myLeague.getManagerFromName(myTeamManagers, username1);
+//                    current1.tradePlayer(myLeague, myTeamManagers);
+//                    break;
+//                case "dropPlayer":
+//                    out.println("Please enter your username:");
+//                    String username2 = in.nextLine();
+//                    TeamManager current2 = myLeague.getManagerFromName(myTeamManagers, username2);
+//                    out.println("Please enter your team name:");
+//                    String currentTeam1 = in.nextLine();
+//                    current2.dropPlayer(currentTeam1, myLeague);
+//                    break;
                 default:
                     out.println("Please provide a valid command:");
             }

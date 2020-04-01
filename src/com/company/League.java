@@ -12,7 +12,8 @@ public class League {
     private String name;
     private String owner;
     private ArrayList<Team> teams = new ArrayList<Team>();
-    private FootballPool myPool = new FootballPool();
+//    private FootballPool myPool = new FootballPool();
+    private FootballPool myPool = FootballPool.getInstance();
     private ArrayList<Integer> draftOrder = new ArrayList<Integer>();
     private Integer[][] scheduledMatches;
     private int open = 1; //1 means teams can be added, 0 means no more teams allowed
@@ -173,7 +174,7 @@ public class League {
             out.println("You must close the league and set the draft order first.");
             return false;
         }else {
-            for (int j = 0; j < 2; j++) {
+            for (int j = 0; j < 2; j++) { //in the real version j<11 since there should be 11 players on each team
                 for (int index = 0; index < draftOrder.size(); index++) {
                     int current = draftOrder.get(index);
                     String teamName = teams.get(current).getName();
@@ -189,7 +190,6 @@ public class League {
                     int i = 0;
                     while (i < 1) {
                         boolean again = manager.draftPlayer(teamName, this);
-                        out.println("is this happening?");
                         if (again) {
                             i++;
                         }
@@ -233,9 +233,10 @@ public class League {
         return finalWinner;
     }
 
-    //remember to change the flag back @ me!
-    public void leagueController(LeagueManager manager) throws InterruptedException {
+
+    public void leagueController(LeagueManager manager, ArrayList<TeamManager> managers) throws InterruptedException {
         if(draftFlag==1 && scheduledMatches != null) {
+            tradeFlag = 0;
             out.println("Congrats. Your season is underway.");
             int numTeams = teams.size();
             for(int week = 0; week < scheduledMatches.length; week++) {
@@ -264,8 +265,56 @@ public class League {
                     match.printMatch(true);
                 }
                 this.tradeFlag = 1;
-                out.println("You may now trade, draft, or drop players for the next 24 hours.");
-                sleep(4000); //wait 24 hours
+                out.println("You now each have a chance to trade, draft, or drop players.");
+//                sleep(30000); //wait 24 hours no
+//                Date now = new Date();
+//                Date later = new Date();
+//                while((later - now) < 30000){
+//                    this.tradeFlag = 1;
+//                }
+                for(Team team : teams){
+                    String teamName = team.getName();
+                    String owner = team.getOwner();
+                    out.println(owner + " it is your turn to trade, draft, or drop players for your team, " + teamName + ".");
+                    out.println("Enter 'help' to see the possible commands or 'done' to end your turn.");
+                    TeamManager myManager = getManagerFromName(managers, owner);
+                    String command = "";
+                    while (!command.equals("done")){
+                        command = in.nextLine();
+                        switch (command){
+                            case "draftPlayer":
+                                myManager.draftPlayer(teamName, this);
+                                break;
+                            case "tradePlayer":
+                                myManager.tradePlayer(team,this, managers);
+                                break;
+                            case "dropPlayer":
+                                myManager.dropPlayer(team, this);
+                                break;
+                            case "seeMyTeam":
+                                team.printTeam();
+                                break;
+                            case  "seePlayerPool":
+                                myPool.printPlayers();
+                                break;
+                            case "seeRecords":
+                                printRecords();
+                                break;
+                            case "help":
+                                out.println("The possible commands are as follows:");
+                                out.println("tradePlayer");
+                                out.println("draftPlayer");
+                                out.println("dropPlayer");
+                                out.println("seeMyTeam - This allows you to see your personal roster.");
+                                out.println("seePlayerPool - This allows you to see all players in the league.");
+                                out.println("seeRecords - This allows you to see the wins/loses of all teams in the league.");
+                                out.println("done");
+                                break;
+                            default:
+                                out.println("Input valid command, or 'done' to end your turn.");
+                        }
+                    }
+                }
                 out.println("The trading period is over.");
                 //The next week of play has started.
             }
@@ -286,5 +335,11 @@ public class League {
         }
     }
 
+    public void printRecords(){
+        for(Team team : teams){
+            team.printRecord();
+        }
+    }
+    
 
 }
