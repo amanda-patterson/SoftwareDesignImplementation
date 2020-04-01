@@ -54,12 +54,5 @@ public class Matchup {
         return this.winner;
     }
 
-
-
-
-    //private int getGameDay(){}
-    //calcpoints
-    //updatescores
-
 }
 

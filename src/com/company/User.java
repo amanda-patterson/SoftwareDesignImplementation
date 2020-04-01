@@ -5,13 +5,26 @@ import java.util.Scanner;
 
 import static java.lang.System.out;
 
-public abstract class User {
+public abstract class User extends Observer {
     Scanner in = new Scanner(System.in);
     Scanner in2 = new Scanner(System.in); //I could not for the life of me figure out why I need 2 scanners, but it works with 2 and not with 1, so here we are
 
     protected String name;
     protected int privateID;
     protected ArrayList<String> teams = new ArrayList<String>();
+    protected boolean canTrade = true;
+
+//    public User(Subject subject){
+//        this.subject = subject;
+//        subject.attach(this);
+//    }
+    public void update(){
+        if(this.subject.getTradeFlag() == 0){
+            canTrade = false;
+        }else{
+            canTrade = true;
+        }
+    }
 
     public String getName(){
         return name;
@@ -42,7 +55,7 @@ public abstract class User {
         }
     }
     public boolean draftPlayer(String teamName, League myLeague){
-        if(myLeague.canTrade()) {
+        if(canTrade) {
             if (checkID()) {
                 Team currentTeam = myLeague.getTeamFromName(teamName);
                 out.println("Enter the name of the player you want to draft: ");
@@ -61,7 +74,7 @@ public abstract class User {
     }
 
     public void dropPlayer(Team currentTeam, League myLeague){
-        if(myLeague.canTrade()) {
+        if(canTrade) {
             if (checkID()) {
 //                Team currentTeam = myLeague.getTeamFromName(teamName);
                 out.println("Enter the name of the player you want to drop");
@@ -75,7 +88,7 @@ public abstract class User {
     }
     //Team1 wants to trade player1 for player2 on Team2
     public void tradePlayer(Team teamA, League myLeague, ArrayList<TeamManager> managers){
-        if(myLeague.canTrade()) {
+        if(canTrade) {
             if (checkID()) {
 //                out.println("Please input your team name: ");
 //                String team1 = in.nextLine();

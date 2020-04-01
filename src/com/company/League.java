@@ -2,41 +2,31 @@ package com.company;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Date;
 
 import static java.lang.System.*;
 import static java.lang.Thread.sleep;
 
-public class League {
+public class League extends Subject{
     Scanner in = new Scanner(System.in);
     private String name;
     private String owner;
     private ArrayList<Team> teams = new ArrayList<Team>();
-//    private FootballPool myPool = new FootballPool();
     private FootballPool myPool = FootballPool.getInstance();
     private ArrayList<Integer> draftOrder = new ArrayList<Integer>();
     private Integer[][] scheduledMatches;
     private int open = 1; //1 means teams can be added, 0 means no more teams allowed
     private int draftFlag = 0; //0 means draft not complete, 1 is complete.
-    private int tradeFlag = 1;
 
-    //This is just for testing. Teams will not be added this way in Assignment 3.
-//    Team team0 = new Team("Jerry");
-//    Team team1 = new Team("Lakers") ;
-//    Team team2 = new Team("WinnersOnly");
-//    Team team3 = new Team("ILoveSoccer");
-//    Team team4 = new Team("OddTeam!");
-//    Team team5 = new Team("AnotherTeam!");
-//    Team team6 = new Team("LastTeam!");
-//    protected League() {
-//        teams.add(team0);
-//        teams.add(team1);
-//        teams.add(team2);
-//        teams.add(team3);
-//        teams.add(team4);
-//        teams.add(team5);
-//        teams.add(team6);
-//    }
+    //This is the state that will trigger the state change for the observer class
+    private int tradeFlag = 1;
+    public int getTradeFlag(){
+        return tradeFlag;
+    }
+    public void setTradeFlag(int state){
+        this.tradeFlag = state;
+        this.notifyAllObservers();
+    }
+
     public void open(){
         open = 1;
     }
@@ -67,16 +57,42 @@ public class League {
     public void addTeam(Team newTeam){
         teams.add(newTeam);
     }
-    public ArrayList<Integer> getDraftOrder(){
-        return draftOrder;
-    }
+//    public ArrayList<Integer> getDraftOrder(){
+//        return draftOrder;
+//    }
     public void setDraftOrder(ArrayList<Integer> myOrder){
         draftOrder = myOrder;
     }
-    public Integer[][] getScheduledMatches(){
-        return scheduledMatches;
+//    public Integer[][] getScheduledMatches(){
+//        return scheduledMatches;
+//    }
+    public TeamManager getManagerFromName(ArrayList<TeamManager> managers, String name){
+        for (TeamManager manager: managers){
+            if(manager.getName().equals(name)){
+                return manager;
+            }
+        }
+        return null;
+    }
+    public Team getTeamFromName(String teamName){
+        for(Team team : teams){
+            if(team.getName().equals(teamName)){
+                return team;
+            }
+        }
+        return null;
     }
 
+    public void printRecords(){
+        for(Team team : teams){
+            team.printRecord();
+        }
+    }
+    public void printTeams(){
+        for (Team team : teams){
+            team.printTeam();
+        }
+    }
 
     //This is a round robin scheduling algorithm. It ensures that each team plays every other team exactly once.
     //It stores the created schedule in 'scheduledMatches' which is a 2 dimensional array. The rows correspond to the
@@ -90,7 +106,7 @@ public class League {
             schedule.add(i);
         }
         if(n%2 == 0){
-            //rows correspond to which week of the season
+            //rows correspond to the week of the season
             scheduledMatches = new Integer[n-1][n];
             for(int i = 0; i < n-1; i++) {
                 out.println("Week " + (i+1) + ": ");
@@ -145,36 +161,20 @@ public class League {
             }
         }
         out.println("Schedule set.");
-//        Printing method for debugging purposes:
-//        for (int i = 0; i < n-1; i++)
-//            for (int j = 0; j < n; j++)
-//                System.out.println("arr[" + i + "][" + j + "] = "
-//                        + scheduledMatches[i][j]);
     }
 
-    public Team getTeamFromName(String teamName){
-        for(Team team : teams){
-            if(team.getName().equals(teamName)){
-                return team;
-            }
-        }
-        return null;
-    }
-
-    public void printTeams(){
-        for (Team team : teams){
-            team.printTeam();
-        }
-    }
-
+    //This actually runs the drafting procedure for the league. Each team gets a chance to draft a player.
+    //They draft according to the Draft Order that was set by the league manager. This continues
     public boolean runDraft(ArrayList<TeamManager> managers){
-        //for testing we are only adding 2 players per team
-        //remember to change this
+        //for testing we are only added 2 players per team
         if(draftOrder.size() == 0 || open == 1){
             out.println("You must close the league and set the draft order first.");
             return false;
         }else {
-            for (int j = 0; j < 2; j++) { //in the real version j<11 since there should be 11 players on each team
+            //***IMPT*** This should change to j < 11!! THERE SHOULD BE 11 PLAYERS PER TEAM ***IMPT***//
+            //We have left it as 2 for grading purposes. It is extremely annoying to manually draft 11 players per team.//
+            //The real version would have j < 11 //
+            for (int j = 0; j < 2; j++) {
                 for (int index = 0; index < draftOrder.size(); index++) {
                     int current = draftOrder.get(index);
                     String teamName = teams.get(current).getName();
@@ -200,16 +200,8 @@ public class League {
             return true;
         }
     }
-    public TeamManager getManagerFromName(ArrayList<TeamManager> managers, String name){
-        for (TeamManager manager: managers){
-            if(manager.getName().equals(name)){
-                return manager;
-            }
-        }
-        return null;
-    }
 
-    //the team with the most amount of wins is the winner, if there is a tie, then the team with the higher points wins
+    //The team with the most amount of wins is the winner. If there is a tie, then the team with the higher points wins.
     public Team calcWinner(){
         ArrayList<Team> winners = new ArrayList<Team>();
         int maxWins = 0;
@@ -233,10 +225,13 @@ public class League {
         return finalWinner;
     }
 
-
+    //This function actually controls the running of the league.
+    //Once startSeason is called, everything is automated by this function.
+    //We considered making it its own class, but decided to make the league class deeper as there isn't much, if any interface added by this class.
+    //It is hidden functionality.
     public void leagueController(LeagueManager manager, ArrayList<TeamManager> managers) throws InterruptedException {
         if(draftFlag==1 && scheduledMatches != null) {
-            tradeFlag = 0;
+            setTradeFlag(0);
             out.println("Congrats. Your season is underway.");
             int numTeams = teams.size();
             for(int week = 0; week < scheduledMatches.length; week++) {
@@ -255,7 +250,7 @@ public class League {
                 for (Matchup match : weeklyMatches) {
                     match.printMatch();
                 }
-                sleep(4000); //wait a week
+                sleep(4000); //****IMPT**** This would also be changed to a week. We have left it as 4 seconds for grading purposes.
                 out.println("The week of play has ended. League Manager, please enter the weeks statistics.");
                 manager.addStatistics(this);
                 //Update the matchups
@@ -264,14 +259,8 @@ public class League {
                     match.closeMatch();
                     match.printMatch(true);
                 }
-                this.tradeFlag = 1;
+                setTradeFlag(1);
                 out.println("You now each have a chance to trade, draft, or drop players.");
-//                sleep(30000); //wait 24 hours no
-//                Date now = new Date();
-//                Date later = new Date();
-//                while((later - now) < 30000){
-//                    this.tradeFlag = 1;
-//                }
                 for(Team team : teams){
                     String teamName = team.getName();
                     String owner = team.getOwner();
@@ -326,20 +315,4 @@ public class League {
             out.println("You must start the draft before entering the season.");
         }
     }
-
-    public boolean canTrade(){
-        if(tradeFlag == 1){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    public void printRecords(){
-        for(Team team : teams){
-            team.printRecord();
-        }
-    }
-    
-
 }

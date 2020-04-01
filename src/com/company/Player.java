@@ -26,15 +26,15 @@ public class Player {
     public String getName(){
         return name;
     }
-    public String getPremierTeam(){
-        return premierTeam;
-    }
+//    public String getPremierTeam(){
+//        return premierTeam;
+//    }
     public Position getPosition(){
         return position;
     }
-    public String getLeagueTeam(){
-        return leagueTeam;
-    }
+//    public String getLeagueTeam(){
+//        return leagueTeam;
+//    }
     public void setLeagueTeam(String myTeam){
         leagueTeam = myTeam;
     }
@@ -44,9 +44,9 @@ public class Player {
     public void setCurrentWeeksScore(int x){
         currentWeeksScore = x;
     }
-    public ArrayList<Integer> getPointsRecord(){
-        return pointsRecord;
-    }
+//    public ArrayList<Integer> getPointsRecord(){
+//        return pointsRecord;
+//    }
     public void addPointsRecord(int x){
         pointsRecord.add(x);
     }

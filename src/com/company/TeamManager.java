@@ -7,6 +7,11 @@ import static java.lang.System.out;
 public class TeamManager extends User {
     Scanner in = new Scanner(System.in);
 
+    public TeamManager(Subject subject){
+        this.subject = subject;
+        subject.attach(this);
+    }
+
     public void joinLeague(League myLeague){
         out.println("Congrats! You are a new team manager. "
                 + "Let's get some information to get started.");

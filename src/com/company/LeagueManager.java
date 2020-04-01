@@ -7,14 +7,14 @@ import java.util.Scanner;
 public class LeagueManager extends User {
 
     private String leagueName;
-
-    public void leagueConstructor(League newLeague){
-        newLeague.setName(this.leagueName);
-        newLeague.setOwner(this.getName());
+    public LeagueManager(Subject subject){
+        this.subject = subject;
+        subject.attach(this);
     }
 
-    public String getLeagueName(){
-        return leagueName;
+    public void leagueSetUp(League newLeague){
+        newLeague.setName(this.leagueName);
+        newLeague.setOwner(this.getName());
     }
     public void setLeagueName(String newName){
         leagueName = newName;
@@ -46,34 +46,6 @@ public class LeagueManager extends User {
                 myLeague.getPool().getPlayers().get(i).addPointsRecord(x);
                 myLeague.getPool().getPlayers().get(i).updateAvgScore();
             }
-//            for (int i = 0; i < myLeague.getPool().getDefenders().size(); i++) {
-//                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getDefenders().get(i).getName() +
-//                        " earned this week:");
-//                int x = in.nextInt();
-//                myLeague.getPool().getDefenders().get(i).setCurrentWeeksScore(x);
-//                myLeague.getPool().getDefenders().get(i).addPointsRecord(x);
-//            }
-//            for (int i = 0; i < myLeague.getPool().getMidfielders().size(); i++) {
-//                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getMidfielders().get(i).getName() +
-//                        " earned this week:");
-//                int x = in.nextInt();
-//                myLeague.getPool().getMidfielders().get(i).setCurrentWeeksScore(x);
-//                myLeague.getPool().getMidfielders().get(i).addPointsRecord(x);
-//            }
-//            for (int i = 0; i < myLeague.getPool().getForwards().size(); i++) {
-//                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getForwards().get(i).getName() +
-//                        " earned this week:");
-//                int x = in.nextInt();
-//                myLeague.getPool().getForwards().get(i).setCurrentWeeksScore(x);
-//                myLeague.getPool().getForwards().get(i).addPointsRecord(x);
-//            }
-//            for (int i = 0; i < myLeague.getPool().getGoalies().size(); i++) {
-//                out.println("Please input the # of Fantasy Points that " + myLeague.getPool().getGoalies().get(i).getName() +
-//                        " earned this week:");
-//                int x = in.nextInt();
-//                myLeague.getPool().getGoalies().get(i).setCurrentWeeksScore(x);
-//                myLeague.getPool().getGoalies().get(i).addPointsRecord(x);
-//            }
             out.println("Statistics updated.");
         }else{
             out.println("Incorrect ID.");
@@ -100,6 +72,7 @@ public class LeagueManager extends User {
             out.println("Incorrect ID.");
         }
     }
+    
     public void scheduler(League myLeague){
         if(checkID(1)) {
             myLeague.setSchedule();
